@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Fuel Mileage</string>
+    <string name="Vehicle1">Silverado</string>
+    <string name="Vehicle2">Corolla</string>
+    <string name="Vehicle3">Sienna</string>
+    <string name="newVehicle">Add Vehicle</string>
+
+<!--  Add Edit Vehicle Screen -->
+    <string name="addVehicle">Add Vehicle</string>
+    <string name="editVehicle">Edit Vehicle</string>
+
+    <string name="displayName">Display Name</string>
+    <string name="vehicleMake">Make</string>
+    <string name="vehicleModel">Model</string>
+    <string name="vehicleYear">Year</string>
+    <string name="vehicleTrim">Trim</string>
+    <string name="vehicleDisplayName">Name to display</string>
+    <string name="odometerReading">Odometer reading</string>
+    <string name="saveButton">Save vehicle</string>
+
+<!--  View Mileage History Screen -->
+    <string name="headerDate">Fecha</string>
+    <string name="headerMPG">MPG</string>
+    <string name="headerDistance">Distance</string>
+
+<!--  Add Edit Mileag Screen -->
+    <string name="addMileage">Add Mileage</string>
+    <string name="editMilage">Edit Mileage</string>
+
+    <!-- string name="odometerReading">Odometer Reading</string  -->
+    <string name="fuelLoaded">Gallons Loaded</string>
+    <string name="totalCost">Total Cost</string>
+    <string name="saveMileage">Save Mileage</string>
+
+</resources>
