@@ -28,14 +28,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fuelmileage.R
+import com.example.fuelmileage.data.DataSource
 import com.example.fuelmileage.data.MileageEntry
 import com.example.fuelmileage.data.Vehicle
 import com.example.fuelmileage.ui.theme.FuelMileageTheme
+import java.time.LocalDateTime
 
 
 @Composable
 fun AddEditMileageScreen(
     editThisMileage:  MileageEntry?
+    , onSaveMileageEntry: () -> Unit
     , modifier: Modifier = Modifier
 ) {
     var screenTitle: String
@@ -43,13 +46,17 @@ fun AddEditMileageScreen(
     val odometerReading = odometerReadingInput.toDoubleOrNull() ?: 0.0
 
     var fuelVolumeLoadedInput by remember { mutableStateOf("") }
-    val fuelVolumeLoaded = fuelVolumeLoadedInput.toDoubleOrNull() ?: ""
+    val fuelVolumeLoaded = fuelVolumeLoadedInput.toDoubleOrNull() ?: 0.0
 
     var totalCostInput by remember { mutableStateOf("") }
-    val totalCost = totalCostInput.toDoubleOrNull() ?: ""
+    val totalCost = totalCostInput.toDoubleOrNull() ?: 0.0
 
-    if (editThisMileage != null)
+    if (editThisMileage != null) {
         screenTitle  = stringResource(id = R.string.editMilage)
+        odometerReadingInput = editThisMileage.odometerReading.toString()
+        fuelVolumeLoadedInput = editThisMileage.gallonsLoaded.toString()
+        totalCostInput = editThisMileage.costOfFuel.toString()
+    }
     else
         screenTitle  = stringResource(id = R.string.addMileage)
 
@@ -74,7 +81,7 @@ fun AddEditMileageScreen(
             , onValueChange = { odometerReadingInput = it }
             , keyboardOptions = KeyboardOptions.Default.copy(
                 keyboardType = KeyboardType.Number
-                , imeAction = ImeAction.Done
+                , imeAction = ImeAction.Next
             )
             , modifier = Modifier
                 .padding(bottom = 16.dp)
@@ -110,10 +117,12 @@ fun AddEditMileageScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = { /*TODO*/ }
-//            , enabled = allInputProvided(odometerReadingInput , vehicleYearInput , vehicleMakeInput , vehicleModelInput)
+            onClick = { SaveMileageEntry(odometerReading , fuelVolumeLoaded , totalCost
+                , onSaveMileageEntry
+            ) }
+            , enabled = allInputProvided(odometerReading , fuelVolumeLoaded , totalCost)
         ) {
-            Text(text = stringResource(id = R.string.saveButton))
+            Text(text = stringResource(id = R.string.saveMileage))
         }
     }
 }
@@ -122,18 +131,23 @@ fun AddEditMileageScreen(
 
 
 
-
-private fun saveVehicle(make: String, model: String, year: Int , trim: String, displayName: String , odometer: Double) {
-    Vehicle(
-        vehicleMake = make
-        , vehicleModel = model
-        , vehicleTrim = trim
-        , vehicleYear = year
-    )
-}
-
 private fun allInputProvided(odometer: Double , fuelVolume: Double , totalCost: Double) : Boolean {
     return(odometer > 0.0 && fuelVolume > 0.0 && totalCost > 0.0 )
+}
+
+private fun SaveMileageEntry(
+    odometer: Double , fuelVolume: Double , totalCost: Double
+    , navToNextScreen: () -> Unit
+) {
+    DataSource.AddMileageEntry(
+        MileageEntry(
+            odometerReading = odometer
+            , dateFueledUp = LocalDateTime.now()
+            , gallonsLoaded = fuelVolume
+            , costOfFuel = totalCost
+        )
+    )
+    navToNextScreen()
 }
 
 
@@ -143,8 +157,17 @@ private fun allInputProvided(odometer: Double , fuelVolume: Double , totalCost: 
     , showSystemUi = true
 )
 @Composable
-fun AddEditMileagePreview() {
+fun AddMileagePreview() {
     FuelMileageTheme {
-        AddEditMileageScreen(editThisMileage = null )
+        AddEditMileageScreen(editThisMileage = null , {} )
+    }
+}
+@Preview(
+    showBackground = true
+    , showSystemUi = true
+)@Composable
+fun EditMileagePreview() {
+    FuelMileageTheme {
+        AddEditMileageScreen(editThisMileage = DataSource.GetVehHistory( DataSource.vehicles[0] ) [4] , {} )
     }
 }

@@ -13,6 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fuelmileage.data.DataSource
+import com.example.fuelmileage.data.MileageUiState
+import com.example.fuelmileage.ui.AddEditMileageScreen
 import com.example.fuelmileage.ui.AddEditVehicleScreen
 import com.example.fuelmileage.ui.MileageViewModel
 import com.example.fuelmileage.ui.MileagesHistoryScreen
@@ -23,7 +25,7 @@ enum class FuelMileageScreen() {
     SelectVehicle
     , AddEditVehicle
     , MileageHistory
-    , MileageInput
+    , AddEditMileage
 }
 
 
@@ -69,7 +71,28 @@ fun FuelMileageApp(
             }
 
             composable( route = FuelMileageScreen.MileageHistory.name ) {
-                MileagesHistoryScreen( uiState.selectedVehicle )
+                MileagesHistoryScreen(
+                    uiState.selectedVehicle
+                    , onSelectAddMileage = {
+                        viewModel.setMileageHxEntry( null )  //  Clear out any previously selected
+                        navController.navigate(FuelMileageScreen.AddEditMileage.name)
+                    }
+                    , onSelectMileageToEdit = {
+                        viewModel.setMileageHxEntry( it )
+                        navController.navigate( FuelMileageScreen.AddEditMileage.name)
+                    }
+                )
+            }
+
+
+            composable( route = FuelMileageScreen.AddEditMileage.name ) {
+                AddEditMileageScreen(
+//                  editThisMileage = DataSource.GetVehHistory( DataSource.vehicles[0] ) [4]
+                    editThisMileage = uiState.selectedMileageEntry
+                    , onSaveMileageEntry = {
+                        navController.navigate( FuelMileageScreen.MileageHistory.name)
+                    }
+                )
             }
         }
     }

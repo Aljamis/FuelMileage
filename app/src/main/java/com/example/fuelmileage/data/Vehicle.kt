@@ -1,7 +1,7 @@
 package com.example.fuelmileage.data
 
 data class Vehicle (
-    val vehicleID:  Int = 0,
+    var vehicleID:  Int = 0,
     val vehicleMake: String = "",
     val vehicleModel: String = "",
     val vehicleYear: Int = 0,

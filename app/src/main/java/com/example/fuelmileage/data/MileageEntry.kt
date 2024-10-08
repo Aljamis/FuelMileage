@@ -10,7 +10,7 @@ import java.time.LocalDateTime
  * costOfFuel will both be zeros
  */
 data class MileageEntry(
-    val id: Int = 0,
+    var id: Int = 0,
     val odometerReading: Double
     , val dateFueledUp:  LocalDateTime
     , val gallonsLoaded:  Double = 0.0

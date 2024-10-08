@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -28,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fuelmileage.R
+import com.example.fuelmileage.data.DataSource
 import com.example.fuelmileage.data.Vehicle
 import com.example.fuelmileage.ui.theme.FuelMileageTheme
 
@@ -38,7 +38,7 @@ fun AddEditVehicleScreen(
     , onSaveVehicleClicked: () -> Unit
     , modifier: Modifier = Modifier
 ) {
-    var screenTitle: String
+    val screenTitle: String
 
     var vehicleDislplayNameInput by remember { mutableStateOf("") }
     val vehicleDislplayName = vehicleDislplayNameInput.toString() ?: ""
@@ -130,12 +130,31 @@ fun AddEditVehicleScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Button(
-            onClick = onSaveVehicleClicked
-            , enabled = allInputProvided(vehicleMakeInput , vehicleModelInput , vehicleYearInput , vehicleDislplayNameInput)
+            onClick = { SaveVehicle(vehicleMakeInput , vehicleModelInput , vehicleYearInput , vehicleDislplayNameInput
+                , onSaveVehicleClicked) }
+            , enabled = allInputProvided(vehicleMakeInput , vehicleModelInput , vehicleYearInput , vehicleYear , vehicleDislplayNameInput)
         ) {
             Text(text = stringResource(id = R.string.saveButton))
         }
     }
+}
+
+
+
+private fun SaveVehicle(
+    vehicleMakeInput: String , vehicleModelInput: String , vehicleYearInput: String , vehicleDislplayNameInput: String
+    , navToNextScreen: () -> Unit
+) {
+    //  Add Vehicle to DataSource
+    DataSource.AddVehicle(
+        Vehicle(
+            vehicleMake = vehicleMakeInput
+            , displayName = vehicleDislplayNameInput
+            , vehicleModel = vehicleModelInput
+            , vehicleYear = vehicleYearInput.toInt()
+            )
+    )
+    navToNextScreen()
 }
 
 
@@ -176,18 +195,18 @@ fun EditInputField(
 
 
 
-private fun saveVehicle(make: String, model: String, year: Int , displayName: String ) {
-    Vehicle(
-        vehicleMake = make
-        , vehicleModel = model
-        , displayName = displayName
-        , vehicleYear = year
-        ,
-    )
-}
+//private fun saveVehicle(make: String, model: String, year: Int , displayName: String ) {
+//    Vehicle(
+//        vehicleMake = make
+//        , vehicleModel = model
+//        , displayName = displayName
+//        , vehicleYear = year
+//        ,
+//    )
+//}
 
-private fun allInputProvided( make: String, model: String, year: String , displayName: String) : Boolean {
-    return(make.isNotEmpty() && model.isNotEmpty() && displayName.isNotEmpty() && year.isNotEmpty() )
+private fun allInputProvided( make: String, model: String, year: String , yearInt: Int , displayName: String) : Boolean {
+    return(make.isNotEmpty() && model.isNotEmpty() && displayName.isNotEmpty() && year.isNotEmpty() && yearInt > 1900 )
 }
 
 

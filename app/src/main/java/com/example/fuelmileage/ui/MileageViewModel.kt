@@ -1,6 +1,7 @@
 package com.example.fuelmileage.ui
 
 import androidx.lifecycle.ViewModel
+import com.example.fuelmileage.data.MileageEntry
 import com.example.fuelmileage.data.MileageUiState
 import com.example.fuelmileage.data.Vehicle
 import com.example.fuelmileage.data.VehicleHistory
@@ -27,12 +28,13 @@ class MileageViewModel : ViewModel() {
             )
         }
     }
-//    fun setVehicleID(vehicleID:  Int) {
-//        _uiState.update { currentState ->
-//            currentState.copy(
-//                selectedVehicleID = vehicleID
-//            )
-//        }
-//    }
+
+    fun setMileageHxEntry( selectedMileageEntry: MileageEntry?) {
+        _uiState.update { currentState ->
+            currentState.copy(
+                selectedMileageEntry = selectedMileageEntry
+            )
+        }
+    }
 
 }
