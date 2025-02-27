@@ -13,7 +13,7 @@ import java.util.Date
 object DataSource {
     val vehicles = mutableListOf(
         Vehicle(vehicleID = 1 , vehicleMake = "Chevrolet", vehicleModel = "Silverado"
-            , displayName = "The Truck")
+            , displayName = "The Truck" , vehicleYear = 2021)
         , Vehicle(vehicleID = 2 , vehicleMake = "Toyota", vehicleModel = "Corolla"
             , displayName = "Violas")
         , Vehicle(vehicleID = 3 , vehicleMake = "Toyota", vehicleModel = "Sienna"

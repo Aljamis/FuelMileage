@@ -21,7 +21,7 @@ class MileageViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(MileageUiState())
     val uiState: StateFlow<MileageUiState> = _uiState.asStateFlow()
 
-    fun setVehicle(selectedVehicle:  Vehicle) {
+    fun setVehicle(selectedVehicle:  Vehicle?) {
         _uiState.update { currentState ->
             currentState.copy(
                 selectedVehicle = selectedVehicle
