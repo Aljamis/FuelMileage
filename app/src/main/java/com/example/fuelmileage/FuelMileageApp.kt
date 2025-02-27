@@ -13,7 +13,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.fuelmileage.data.DataSource
-import com.example.fuelmileage.data.MileageUiState
 import com.example.fuelmileage.ui.AddEditMileageScreen
 import com.example.fuelmileage.ui.AddEditVehicleScreen
 import com.example.fuelmileage.ui.MileageViewModel
@@ -56,6 +55,11 @@ fun FuelMileageApp(
                         navController.navigate( FuelMileageScreen.MileageHistory.name )
                     }
                     , onAddVehicleClicked = {
+                        viewModel.setVehicle( null )
+                        navController.navigate( FuelMileageScreen.AddEditVehicle.name)
+                    }
+                    , onEditVehicle = {
+                        viewModel.setVehicle( it )
                         navController.navigate( FuelMileageScreen.AddEditVehicle.name)
                     }
                 )
@@ -63,9 +67,20 @@ fun FuelMileageApp(
             
             composable( route = FuelMileageScreen.AddEditVehicle.name ) {
                 AddEditVehicleScreen(
-                    editThisVehicle = null
+//                    editThisVehicle = null
+                    editThisVehicle = uiState.selectedVehicle
                     , onSaveVehicleClicked = {
-                        navController.navigate( FuelMileageScreen.SelectVehicle.name)
+//                        navController.navigate( FuelMileageScreen.SelectVehicle.name)
+                        navController.popBackStack()
+                    }
+                    , navigateHome = {
+//                        navController.navigate( FuelMileageScreen.SelectVehicle.name)
+                        /* TODO  pop or remove of navigation history stack */
+                        navController.popBackStack( route = FuelMileageScreen.SelectVehicle.name , inclusive = false , saveState = false)
+//                        navController.clearBackStack(route = FuelMileageScreen.SelectVehicle.name)
+//                        navController.navigate( FuelMileageScreen.SelectVehicle.name)
+//                        navController.navigateUp()
+                        /* Can't do this because it violates principles of navigation */
                     }
                 )
             }

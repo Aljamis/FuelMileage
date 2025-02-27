@@ -12,26 +12,28 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.fuelmileage.R
 import com.example.fuelmileage.common.DateTimeToString
 import com.example.fuelmileage.data.DataSource
 import com.example.fuelmileage.data.MileageEntry
 import com.example.fuelmileage.data.Vehicle
-import com.example.fuelmileage.data.VehicleHistory
 import com.example.fuelmileage.ui.theme.FuelMileageTheme
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MileagesHistoryScreen(
     forThisVehicle:  Vehicle?
@@ -40,37 +42,46 @@ fun MileagesHistoryScreen(
 //    , onSelectEditVehicle: (Vehicle) -> Unit
     , modifier:  Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-        , verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-            , horizontalAlignment = Alignment.CenterHorizontally
-            , verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
-        ) {
-            Text(
-                text = "Mileage History "+ (forThisVehicle?.displayName),
-                fontSize = 25.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .padding(bottom = 10.dp, top = 5.dp)
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text("Mileage History "+ (forThisVehicle?.displayName) )
+                },
             )
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-                    .padding(start = 20.dp , end = 20.dp , bottom = 20.dp)
+        }
+    ) {
+        innerPadding ->
+        Column(
+            modifier = Modifier.padding(innerPadding)
+            , verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_small))
             ) {
-                Button(onClick = onSelectAddMileage ) {
-                    Text(stringResource(id = R.string.addMileage))
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+                ) {
+                    Button(onClick = onSelectAddMileage) {
+                        Text(stringResource(id = R.string.addMileage))
+                    }
                 }
             }
-        }
 
-        MileageHistoryList(
-            historyList = DataSource.GetVehHistory( forThisVehicle )
-            , onSelectMileageToEdit
-        )
+            MileageHistoryList(
+                historyList = DataSource.GetVehHistory(forThisVehicle), onSelectMileageToEdit
+            )
+        }
     }
 }
 
@@ -79,7 +90,7 @@ fun MileagesHistoryScreen(
 fun MileageHistoryList(
     historyList: List<MileageEntry>
     , onSelectMileageToEdit: (MileageEntry) -> Unit
-    , modifier: Modifier = Modifier
+//    , modifier: Modifier = Modifier
 ) {
     LazyColumn {
         var previousMileage = historyList[0].odometerReading
@@ -101,7 +112,9 @@ fun MileageHistoryList(
 }
 
 @Composable
-private fun MileageHxItem( hx: MileageEntry , prevMileage : Double , modifier: Modifier = Modifier ) {
+private fun MileageHxItem( hx: MileageEntry
+                           , prevMileage : Double
+                           , modifier: Modifier = Modifier ) {
     Card(
         modifier = modifier.padding(start = 10.dp, top = 16.dp, bottom = 0.dp, end = 10.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -129,6 +142,6 @@ private fun MileageHxItem( hx: MileageEntry , prevMileage : Double , modifier: M
 @Composable
 fun HistoryScreenPreview() {
     FuelMileageTheme {
-        MileagesHistoryScreen( forThisVehicle = DataSource.vehicles[0] , {} , {} )
+        MileagesHistoryScreen( forThisVehicle = DataSource.vehicles[0] , {} , {}  )
     }
 }
