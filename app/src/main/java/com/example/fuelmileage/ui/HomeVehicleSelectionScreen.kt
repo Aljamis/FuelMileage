@@ -24,6 +24,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -91,6 +95,8 @@ fun VehicleItem(
     , onEditVehicle: (Vehicle) -> Unit
     , modifier: Modifier = Modifier
 ) {
+    var vehicleDisplayname by remember { mutableStateOf( theVehicle.displayName ) }
+
     ElevatedCard(
         modifier = modifier.padding(start = 5.dp, bottom = 0.dp, end = 5.dp),
         elevation = CardDefaults.cardElevation( defaultElevation = 2.dp)
@@ -101,7 +107,8 @@ fun VehicleItem(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
-                    text = theVehicle.displayName,
+//                    text = theVehicle.displayName,
+                    text = vehicleDisplayname ,
                     style = MaterialTheme.typography.titleLarge
                 )
                 Icon(imageVector = Icons.Filled.Edit, contentDescription = ""
