@@ -49,10 +49,11 @@ fun AddEditVehicleScreen(
 ) {
     Scaffold(
         topBar = {
-            val screenTitle: String = if (editThisVehicle != null)
-                stringResource(id = R.string.editVehicle) +": "+ editThisVehicle.displayName
-            else
+            val screenTitle: String = if (editThisVehicle != null) {
+                stringResource(id = R.string.editVehicle) + ": " + editThisVehicle.displayName
+            } else {
                 stringResource(id = R.string.addVehicle)
+            }
 
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -160,8 +161,15 @@ fun AddEditVehicleScreen(
                 }
 
                 Button(
-                    onClick = { saveVehicle(vehicleMakeInput , vehicleModelInput , vehicleYearInput.toString() , vehicleDisplayNameInput
-                        , onSaveVehicleClicked) }
+                    onClick =  {
+                        saveVehicle(
+                            vehicleMakeInput
+                            , vehicleModelInput
+                            , vehicleYearInput.toString()
+                            , vehicleDisplayNameInput
+                            , editThisVehicle
+                            , onSaveVehicleClicked
+                        ) }
 //                    , enabled = allInputProvided(vehicleMakeInput , vehicleModelInput , vehicleYearInput , vehicleYear , vehicleDisplayNameInput)
                     , enabled = allInputProvided(vehicleMakeInput , vehicleModelInput , vehicleYearInput.toString() , vehicleDisplayNameInput)
                 ) {
@@ -176,17 +184,29 @@ fun AddEditVehicleScreen(
 
 private fun saveVehicle(
     vehicleMakeInput: String , vehicleModelInput: String , vehicleYearInput: String , vehicleDisplayNameInput: String
+    , editThisVehicle: Vehicle?
     , navToNextScreen: () -> Unit
 ) {
-    //  Add Vehicle to DataSource
-    DataSource.AddVehicle(
-        Vehicle(
-            vehicleMake = vehicleMakeInput
-            , displayName = vehicleDisplayNameInput
-            , vehicleModel = vehicleModelInput
-            , vehicleYear = vehicleYearInput.toInt()
+    if (editThisVehicle == null ) {
+        //  Add Vehicle to DataSource
+        DataSource.AddVehicle(
+            Vehicle(
+                vehicleMake = vehicleMakeInput
+                , displayName = vehicleDisplayNameInput
+                , vehicleModel = vehicleModelInput
+                , vehicleYear = vehicleYearInput.toInt()
             )
-    )
+        )
+    } else {
+        DataSource.EditVehicle(
+            editThisVehicle.copy(
+                vehicleMake = vehicleMakeInput
+                , displayName = vehicleDisplayNameInput
+                , vehicleModel = vehicleModelInput
+                , vehicleYear = vehicleYearInput.toInt()
+            )
+        )
+    }
     navToNextScreen()
 }
 

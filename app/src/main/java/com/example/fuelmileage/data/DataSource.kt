@@ -1,5 +1,6 @@
 package com.example.fuelmileage.data
 
+import androidx.compose.runtime.mutableStateListOf
 import com.example.fuelmileage.R
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -11,7 +12,8 @@ import java.util.Date
  * a database .. if it were written yet
  */
 object DataSource {
-    val vehicles = mutableListOf(
+//    val vehicles = mutableListOf(
+    val vehicles = mutableStateListOf(
         Vehicle(vehicleID = 1 , vehicleMake = "Chevrolet", vehicleModel = "Silverado"
             , displayName = "The Truck" , vehicleYear = 2021)
         , Vehicle(vehicleID = 2 , vehicleMake = "Toyota", vehicleModel = "Corolla"
@@ -19,9 +21,29 @@ object DataSource {
         , Vehicle(vehicleID = 3 , vehicleMake = "Toyota", vehicleModel = "Sienna"
             , displayName = "Bus")
     )
+
+    /**
+     * Add a new Vehicle to the DataSource
+     */
     fun AddVehicle(newVehicle: Vehicle) {
-        newVehicle.vehicleID = vehicles.size
+        newVehicle.vehicleID = vehicles.size +1
         this.vehicles.add( newVehicle )
+    }
+
+
+    /**
+     * Update and existing Vehicle in the DataSource
+     */
+    fun EditVehicle(theVehicle: Vehicle) {
+        for (vehicle in vehicles) {
+            if (vehicle.vehicleID == theVehicle.vehicleID) {
+                vehicle.vehicleYear  = theVehicle.vehicleYear
+                vehicle.vehicleMake  = theVehicle.vehicleMake
+                vehicle.vehicleModel = theVehicle.vehicleModel
+                vehicle.displayName  = theVehicle.displayName
+                vehicle.vehicleTrim  = theVehicle.vehicleTrim
+            }
+        }
     }
 
 
